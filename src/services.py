@@ -11,18 +11,23 @@ def get_engine():
 def init_db():
     engine = get_engine()
     with engine.connect() as conn:
-        existing_shops = conn.execute(text("select count(*) from shop")).fetchall()[0][0]
-        if existing_shops:
-            print("db already init")
-            return
+        try:
+            existing_shops = conn.execute(text("select count(*) from shop")).fetchall()[0][0]
+            if existing_shops:
+                print("db already init")
+                return
+        except:
+            pass
     with Session(engine) as session:
         models.Base.metadata.create_all(engine)
 
-        dannys_tacos = models.Shop(name="Danny's Tacos")
-        session.add(dannys_tacos)
+        dannys_tacos = models.Shop(name="Danny's Tacos", menu_items=[
+            models.MenuItem("Street Taco"),
+            models.MenuItem("Rolled Taco")
+        ])
         customers = [
             models.Customer(name="Jen"),
             models.Customer(name="Freeman")
         ]
-        session.add_all(customers)
+        session.add_all([dannys_tacos, *customers])
         session.commit()

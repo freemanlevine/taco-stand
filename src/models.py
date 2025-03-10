@@ -1,6 +1,7 @@
 from sqlalchemy.orm import DeclarativeBase
-from sqlalchemy.orm import Mapped, mapped_column
-from sqlalchemy import String
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy import String, ForeignKey
+from typing import List
 
 
 class Base(DeclarativeBase):
@@ -12,6 +13,8 @@ class Shop(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(30))
+
+    menu_items: Mapped[List["MenuItem"]] = relationship()
 
     def __repr__(self) -> str:
         return f"Shop(id={self.id!r}, name={self.name!r})"
@@ -26,9 +29,13 @@ class Customer(Base):
     def __repr__(self) -> str:
         return f"Customer(id={self.id!r}, name={self.name!r})"
 
-# class MenuItem(Base):
-#     """Something that can be sold by shops to customers"""
-#     __tablename__ = "menu_item"
+class MenuItem(Base):
+    """Something that can be sold by shops to customers"""
+    __tablename__ = "menu_item"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    name: Mapped[str] = mapped_column(String(30))
+    shop_id: Mapped[int] = mapped_column(ForeignKey("shop.id"))
     
-#     def __init__(self, name):
-#         self.name = name
+    def __init__(self, name):
+        self.name = name
