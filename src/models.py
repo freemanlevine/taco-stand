@@ -39,3 +39,6 @@ class MenuItem(Base):
     
     def __init__(self, name):
         self.name = name
+
+    def __repr__(self) -> str:
+        return f"MenuItem(id={self.id!r}, name={self.name!r}, shop_id={self.shop_id})"
