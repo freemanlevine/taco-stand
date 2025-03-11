@@ -20,6 +20,7 @@ class Shop(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(30))
+    owned_by: Mapped[int] = mapped_column(ForeignKey("player.id"))
 
     menu_items: Mapped[List["MenuItem"]] = relationship()
 
@@ -59,3 +60,23 @@ class MenuItem(Base):
 
     def __repr__(self) -> str:
         return f"MenuItem(id={self.id!r}, name={self.name!r}, cost=${self.cost/100.0}, shop_id={self.shop_id})"
+
+class Player(Base):
+    """the player. Players can own shops."""
+    __tablename__ = "player"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    name: Mapped[str] = mapped_column(String(30), unique=True)
+
+    owned_shops: Mapped[List["Shop"]] = relationship()
+
+    def __repr__(self) -> str:
+        return f"Player(id={self.id!r}, name={self.name!r})"
+
+class ActivePlayer(Base):
+    __tablename__ = "active_player"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    player_id: Mapped[int] = mapped_column(ForeignKey("player.id"))
+
+    player: Mapped[Player] = relationship()

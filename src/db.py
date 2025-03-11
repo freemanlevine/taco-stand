@@ -1,6 +1,7 @@
 import sqlite3
 from sqlalchemy import create_engine, text, select
 from sqlalchemy.orm import Session
+from sqlalchemy.orm.exc import NoResultFound
 
 import os
 
@@ -75,3 +76,54 @@ def get_menu_items(session, shop_id):
         select(models.MenuItem)
         .where(models.MenuItem.shop_id == shop_id)
     ))
+
+def create_player(player_name):
+    engine = get_engine()
+    with Session(engine) as session:
+        new_player = models.Player(name=player_name)
+        session.add(new_player)
+        session.commit()
+
+def get_active_player():
+    engine = get_engine()
+    with Session(engine) as session:
+        active_player = session.scalars(select(models.ActivePlayer)).one()
+        if active_player:
+            print(f'active player {active_player.player.name} found')
+            return active_player.player
+        else:
+            print(f'no active player found')
+            raise Exception("No Active Player Found")
+        
+def set_active_player(player_id):
+    engine = get_engine()
+    with Session(engine) as session:
+        next_player = get_by_id(session, models.Player, player_id)
+        try:
+            active_player = session.scalars(select(models.ActivePlayer)).one()
+            active_player.player_id = next_player.id
+            active_player.player = next_player
+            session.commit()
+            return active_player.player
+        except:
+            active_player = models.ActivePlayer(
+                player_id = next_player.id,
+                player=next_player
+            )
+            session.add(active_player)
+            session.commit()
+            return active_player.player
+
+def delete_player(player_id):
+    engine = get_engine()
+    with Session(engine) as session:
+        player = get_by_id(session, models.Player, player_id)
+        try:
+            active_player = session.scalars(select(models.ActivePlayer)).one()
+            if active_player.player_id == player_id:
+                raise ValueError("Can't delete active player")
+        except NoResultFound:
+            ## continue with delete if no active player is found
+            pass
+        session.delete(player)
+        session.commit()

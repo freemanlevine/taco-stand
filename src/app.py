@@ -1,21 +1,86 @@
-from flask import Flask
+from flask import Flask, redirect
+from flask import request
 
 from . import db, models
 
 app = Flask(__name__)
 
 links = {
-    "home": '<div><a href="/">Back to Home</a><div>',
-    "shops": '<div><a href="/shops">View Shops</a><div>',
-    "customers": '<div><a href="/customers">View Customers</a><div>'
+    "home": '<div><a href="/">Back to Home</a></div>',
+    "shops": '<div><a href="/shops">View Shops</a></div>',
+    "customers": '<div><a href="/customers">View Customers</a></div>',
+    "player": '<div><a href="/player">Load Player Profile</a></div>',
 }
 
 @app.route("/")
-def hello_world():
+def home():
     html = "<p>Welcome to the Taco Stand App!</p>"
+    try:
+        active_player = db.get_active_player()
+        html += f'Current Player: {active_player.name}'
+    except Exception as e:
+        html += 'No Player loaded<br>'
     html += links["shops"]
     html += links["customers"]
+    html += links["player"]
     return html
+
+@app.route("/player")
+def show_players():
+    engine = db.get_engine()
+    html = ""
+    with db.Session(engine) as session:
+        players = db.get_all(session, models.Player)
+        for player in players:
+            html += '<div>' + player.name + '</div>'
+            html += f'<div><a href="/player/{player.id}/load">Load Profile</a></div>'
+            html += f'<div><a href="/player/{player.id}/delete">Delete Profile</a><div>'
+        html += create_player_form("Create New Player")
+    html += links["home"]
+    return html
+
+def create_player_form(button_text):
+    html = '<form action="/player/create">'
+    html += '<label for="name">Name:</label>'
+    html += '<input id="name" name="name"> '
+    html += f'<input type="submit" value="{button_text}">'
+    html += '</form>'
+    return html
+
+
+@app.route("/player/create")
+def create_player():
+    name = request.args.get('name')
+    html = ''
+    try:
+        db.create_player(name)
+        html += f'Player {name} created!'
+    except Exception as e:
+        html += f'Error creating player - {e}'
+    html += '<br><br>Create Another Player:'
+    html += create_player_form("Create")
+    html += links['home']
+    return html
+
+@app.route("/player/<int:player_id>/load/")
+def load_player(player_id):
+    html = ''
+    try:
+        active_player = db.set_active_player(player_id)
+        html = f'Player {active_player.name} loaded!'
+    except Exception as e:
+        html += f'Error loading player profile - {e}'
+    html += links['home']
+    return html
+
+@app.route("/player/<int:player_id>/delete/")
+def delete_player(player_id):
+    try:
+        db.delete_player(player_id)
+        return redirect('/player')
+    except Exception as e:
+        print(f'Error deleting player - {e}')
+        return redirect('/player')
 
 @app.route("/shops")
 def show_shops():
@@ -24,7 +89,7 @@ def show_shops():
     with db.Session(engine) as session:
         shops = db.get_all(session, models.Shop)
         for shop in shops:
-            html += '<div>' + shop.get_menu_text() + '<div>'
+            html += '<div>' + shop.get_menu_text() + '</div>'
     html += '<br>'
     html += links["home"]
     return html
