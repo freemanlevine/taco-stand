@@ -51,14 +51,23 @@ def purchase_item(customer_id, menu_item_id):
         customer = get_by_id(session, Customer, customer_id)
         menu_item = get_by_id(session, MenuItem, menu_item_id)
         shop = get_by_id(session, Shop, menu_item.shop_id)
-        customer.money = customer.money - menu_item.cost
-        print("Customer {} purchased {} from {} and has ${} left!".format(
-            customer.name,
-            menu_item.name,
-            shop.name,
-            customer.money/100.0
-        ))
-        session.commit()
+        money_remaining = customer.money - menu_item.cost
+        if money_remaining < 0:
+            print("{name} doesn't have enough money!\n{item_name} costs ${item_cost:,.2f} and {name} has ${amount:,.2f} left".format(
+                name = customer.name,
+                item_name = menu_item.name,
+                item_cost = menu_item.cost/100.0,
+                amount = customer.money/100.0
+            ))
+        else:
+            customer.money = money_remaining
+            session.commit()
+            print("Customer {} purchased {} from {} and has ${:,.2f} left!".format(
+                customer.name,
+                menu_item.name,
+                shop.name,
+                customer.money/100.0
+            ))
 
 def get_menu_items(session, shop_id):
     return list(session.scalars(
