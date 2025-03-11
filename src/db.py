@@ -42,6 +42,9 @@ def init_db():
 def get_by_id(session, object_type, id):
     return session.scalars(select(object_type).where(object_type.id == id)).one()
 
+def get_all(session, object_type):
+    return session.scalars(select(object_type)).all()
+
 def purchase_item(customer_id, menu_item_id):
     engine = get_engine()
     with Session(engine) as session:
@@ -56,3 +59,9 @@ def purchase_item(customer_id, menu_item_id):
             customer.money/100.0
         ))
         session.commit()
+
+def get_menu_items(session, shop_id):
+    return list(session.scalars(
+        select(models.MenuItem)
+        .where(models.MenuItem.shop_id == shop_id)
+    ))

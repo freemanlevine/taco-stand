@@ -47,4 +47,4 @@ class MenuItem(Base):
     shop_id: Mapped[int] = mapped_column(ForeignKey("shop.id"))
 
     def __repr__(self) -> str:
-        return f"MenuItem(id={self.id!r}, name={self.name!r}, shop_id={self.shop_id})"
+        return f"MenuItem(id={self.id!r}, name={self.name!r}, cost=${self.cost/100.0}, shop_id={self.shop_id})"
