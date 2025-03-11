@@ -4,12 +4,6 @@ welcome_text = """
 Welcome to Taco Stand!
 """
 
-options_menu = """
-Please select from the following options.
-
-1. Purchase Menu Item
-"""
-
 def input_menu_number(msg):
     user_input = input(msg)
     try:
@@ -41,16 +35,38 @@ def handle_purchase_item():
         customer = input_select_from_all_objects(session, models.Customer)
 
         # allow the user to choose a shop
-        shop = input_select_from_all_objects(session, models.Shop, )
+        shop = input_select_from_all_objects(session, models.Shop)
 
         # allow the user to choose a menu item
-        menu_items = db.get_menu_items(session, shop.id)
-        menu_item = input_select_object(menu_items, models.MenuItem.__tablename__)
+        shop.print_menu()
+        user_input = input_menu_number("Enter the number of the item you wish to purchase.\n")
+        menu_item = shop.menu_items[user_input-1]
 
         db.purchase_item(customer.id, menu_item.id)
+
+def handle_display_menu():
+    engine = db.get_engine()
+    with db.Session(engine) as session:
+        # choose a shop whose menu we will display
+        shop = input_select_from_all_objects(session, models.Shop)
+        shop.print_menu()
+        user_input = input_menu_number("1. Purchase an item\n2. Return to main menu\n")
+        if user_input == 1:
+            user_input = input_menu_number("Enter the number of the item you wish to purchase.\n")
+            menu_item = shop.menu_items[user_input-1]
+            customer = input_select_from_all_objects(session, models.Customer)
+            db.purchase_item(customer.id, menu_item.id)
+
+options_menu = """
+Please select from the following options.
+
+1. Purchase Menu Item
+2. Display Shop Menu
+"""
     
 menu_handlers = {
-    1: handle_purchase_item
+    1: handle_purchase_item,
+    2: handle_display_menu
 }
 
 def run():
