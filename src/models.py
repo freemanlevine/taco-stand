@@ -25,7 +25,7 @@ class Customer(Base):
     
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(30))
-    money: Mapped[int] = mapped_column(Integer) # in cents
+    money: Mapped[int] = mapped_column(Integer, default=1000) # in cents
 
     def __repr__(self) -> str:
         return f"Customer(id={self.id!r}, name={self.name!r}, money=${self.money/100.0})"
