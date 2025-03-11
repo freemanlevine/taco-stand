@@ -70,6 +70,7 @@ def purchase_item(customer_id, menu_item_id):
             ))
 
 def get_menu_items(session, shop_id):
+    """returns a list of menu items belonging to a given shop"""
     return list(session.scalars(
         select(models.MenuItem)
         .where(models.MenuItem.shop_id == shop_id)

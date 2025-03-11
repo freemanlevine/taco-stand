@@ -26,12 +26,16 @@ class Shop(Base):
     def __repr__(self) -> str:
         return f"Shop(id={self.id!r}, name={self.name!r})"
     
-    def print_menu(self):
-        print("--- {} ---".format(self.name))
-        print("Menu:")
+    def get_menu_text(self):
+        text = "--- {} ---\n".format(self.name)
+        text += "Menu:\n"
         for i in range(1, len(self.menu_items)+1):
             item = self.menu_items[i-1]
-            print("\t{}. {}: ${:,.2f}".format(i, item.name, item.cost/100.0))
+            text += "\t{}. {}: ${:,.2f}\n".format(i, item.name, item.cost/100.0)
+        return text
+    
+    def print_menu(self):
+        print(self.get_menu_text())
 
 class Customer(Base):
     """A customer that can buy goods from one or more shops"""
