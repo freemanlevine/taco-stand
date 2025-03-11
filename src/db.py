@@ -2,11 +2,18 @@ import sqlite3
 from sqlalchemy import create_engine, text, select
 from sqlalchemy.orm import Session
 
+import os
+
 from . import models
 from .models import Shop, Customer, MenuItem
 
+DB_PATH = "db/database.db"
+
 def get_engine():
-    return create_engine("sqlite:///db/database.db", echo=False)
+    return create_engine("sqlite:///{}".format(DB_PATH), echo=False)
+
+def delete_db():
+    os.remove(DB_PATH)
 
 def init_db():
     engine = get_engine()
