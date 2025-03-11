@@ -77,10 +77,13 @@ def get_menu_items(session, shop_id):
         .where(models.MenuItem.shop_id == shop_id)
     ))
 
-def create_player(player_name):
+def create_player(player_name, starting_money=0):
     engine = get_engine()
     with Session(engine) as session:
-        new_player = models.Player(name=player_name)
+        new_player = models.Player(
+            name=player_name,
+            money=starting_money
+        )
         session.add(new_player)
         session.commit()
 

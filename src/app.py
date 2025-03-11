@@ -17,7 +17,7 @@ def home():
     html = "<p>Welcome to the Taco Stand App!</p>"
     try:
         active_player = db.get_active_player()
-        html += f'Current Player: {active_player.name}'
+        html += f'Current Player: {active_player.name} - ${active_player.money/100.0:,.2f}'
     except Exception as e:
         html += 'No Player loaded<br>'
     html += links["shops"]
@@ -32,17 +32,35 @@ def show_players():
     with db.Session(engine) as session:
         players = db.get_all(session, models.Player)
         for player in players:
-            html += '<div>' + player.name + '</div>'
+            html += f'<div>{player.name} - ${player.money/100.0:,.2f}</div>'
             html += f'<div><a href="/player/{player.id}/load">Load Profile</a></div>'
             html += f'<div><a href="/player/{player.id}/delete">Delete Profile</a><div>'
         html += create_player_form("Create New Player")
     html += links["home"]
     return html
 
+difficulties = {
+    'easy': 100*100, # $100,
+    'medium': 75*100, # $100,
+    'hard': 50*100, # $100,
+    'ultra': 25*100 # $100
+}
+
+difficulty_selector = f"""
+<label for="difficulty">Difficulty</label>
+<select name="difficulty" id="difficulty">
+  <option value="easy">Easy - $100</option>
+  <option value="medium">Medium - $75</option>
+  <option value="hard">Hard - $50</option>
+  <option value="ultra">Ultra - $25</option>
+</select>
+"""
+
 def create_player_form(button_text):
     html = '<form action="/player/create">'
     html += '<label for="name">Name:</label>'
     html += '<input id="name" name="name"> '
+    html += difficulty_selector
     html += f'<input type="submit" value="{button_text}">'
     html += '</form>'
     return html
@@ -51,10 +69,11 @@ def create_player_form(button_text):
 @app.route("/player/create")
 def create_player():
     name = request.args.get('name')
+    difficulty = request.args.get('difficulty')
     html = ''
     try:
-        db.create_player(name)
-        html += f'Player {name} created!'
+        db.create_player(name, starting_money=difficulties[difficulty])
+        html += f'Player {name} created on {difficulty} difficulty!'
     except Exception as e:
         html += f'Error creating player - {e}'
     html += '<br><br>Create Another Player:'

@@ -67,6 +67,7 @@ class Player(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(30), unique=True)
+    money: Mapped[int] = mapped_column(Integer, default=0) # in cents
 
     owned_shops: Mapped[List["Shop"]] = relationship()
 
