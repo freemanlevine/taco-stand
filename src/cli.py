@@ -1,4 +1,4 @@
-from src import db, models
+from . import db, models
 
 welcome_text = """
 Welcome to Taco Stand!
