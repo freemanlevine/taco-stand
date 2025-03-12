@@ -19,7 +19,7 @@ base_profit_margin = 0.15
 
 def get_random_menu():
     """select between 1 and 2 random menu items"""
-    number_of_items = random.randint(1, 2)
+    number_of_items = random.randint(1, len(available_menu_items))
     return random.sample(available_menu_items, k=number_of_items)
 
 def get_random_name():
