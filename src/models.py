@@ -22,7 +22,7 @@ class Shop(Base):
     name: Mapped[str] = mapped_column(String(30))
     owned_by: Mapped[int] = mapped_column(ForeignKey("player.id"))
 
-    menu_items: Mapped[List["MenuItem"]] = relationship()
+    menu_items: Mapped[List["MenuItem"]] = relationship(cascade="all,delete")
 
     def __repr__(self) -> str:
         return f"Shop(id={self.id!r}, name={self.name!r})"

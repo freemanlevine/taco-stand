@@ -17,7 +17,8 @@ def player_block():
     try:
         active_player = db.get_active_player()
         html += f'<div>Current Player: {active_player.name} - ${active_player.money/100.0:,.2f}<br>'
-        html += f'<a href="/build-shop">Build Shop - ${game.shop_price/100:,.2f}</a></div><br>'
+        html += f'<a href="/build-shop">Build Shop - ${game.shop_price/100:,.2f}</a><br>'
+        html += f'<a href="increment">Increment Simulation</a></div><br>'
     except Exception as e:
         html += 'No Player loaded<br>'
     return html
@@ -29,6 +30,15 @@ def home():
     html += links["shops"]
     html += links["customers"]
     html += links["player"]
+    return html
+
+@app.route("/increment")
+def increment_simulation():
+    html = "<div> Actions During Turn:<br>"
+    html += "<br>".join(game.increment_simulation())
+    html += "</div><br>"
+    html += player_block()
+    html += links["home"]
     return html
 
 @app.route("/build-shop")

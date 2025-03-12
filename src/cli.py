@@ -42,7 +42,7 @@ def handle_purchase_item():
         user_input = input_menu_number("Enter the number of the item you wish to purchase.\n")
         menu_item = shop.menu_items[user_input-1]
 
-        db.purchase_item(customer.id, menu_item.id)
+        db.purchase_item(session, customer.id, menu_item.id)
 
 def handle_display_menu():
     engine = db.get_engine()
@@ -55,7 +55,7 @@ def handle_display_menu():
             user_input = input_menu_number("Enter the number of the item you wish to purchase.\n")
             menu_item = shop.menu_items[user_input-1]
             customer = input_select_from_all_objects(session, models.Customer)
-            db.purchase_item(customer.id, menu_item.id)
+            db.purchase_item(session, customer.id, menu_item.id)
 
 options_menu = """
 Please select from the following options.
