@@ -35,7 +35,6 @@ def increment_simulation():
     with db.get_session() as session:
         customers = db.get_all(session, models.Customer)
         shops = db.get_all(session, models.Shop)
-        active_player = db.get_active_player()
         for customer in customers:
             modified_weights = action_weights.copy()
             # each shop provides a 10% boost to the weight of going to a shop
@@ -61,4 +60,6 @@ def increment_simulation():
                 session.delete(customer)
                 session.commit()
                 log.append(f'Customer {customer.name} left the game')
+            else:
+                raise ValueError(f"Invalid action - {action}")
     return log
