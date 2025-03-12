@@ -40,7 +40,14 @@ def increment_simulation():
             # each shop provides a 10% boost to the weight of going to a shop
             modified_weights[1] = modified_weights[1]*(1 + 0.1*len(shops))
             # each customer provides a 5% boost to the weight of leaving the game
-            modified_weights[2] = modified_weights[2]*(1 + 0.05*len(customers))
+            # if the customer has >= $10, they ignore the base weight for leaving
+            # if the customer has < $5, it doubles the weight for leaving
+            wealth_factor = 1
+            if customer.money >= 10*100:
+                wealth_factor = 0
+            elif customer.money < 5*100:
+                wealth_factor = 2
+            modified_weights[2] = modified_weights[2]*(wealth_factor + 0.05*len(customers))
             action = random.choices(customer_actions, weights=modified_weights, k=1)[0]
             if action == 'go_to_shop':
                 if len(shops) == 0:
