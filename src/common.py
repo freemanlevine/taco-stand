@@ -14,7 +14,9 @@ base_foods = [
     ('Pancakes', 4.00*100),
     ('Burrito', 6.00*100),
     ('Salad', 5.00*100),
-    ('Smoothie', 8.00*100)
+    ('Smoothie', 8.00*100),
+    ('Waffle', 4.50*100),
+    ('Pretzel', 2.00*100)
 ]
 
 modifiers = [
@@ -23,7 +25,10 @@ modifiers = [
     ('Strawberry', 1.75),
     ('Chicken', 2.0),
     ('Loaded', 2.25),
-    ('DoubleStuffed', 2.5)
+    ('Double Stuffed', 2.5),
+    ('Fun Sized', 0.75),
+    ('Onion', 0.5),
+    ('Twice Baked', 1.85)
 ]
 
 base_profit_margin = 0.15
