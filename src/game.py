@@ -9,7 +9,7 @@ customer_actions = [
 ]
 
 action_weights = [
-    0.35, 0.25, 0.10
+    35, 25, 10
 ]
 
 # $20.00
@@ -37,7 +37,12 @@ def increment_simulation():
         shops = db.get_all(session, models.Shop)
         active_player = db.get_active_player()
         for customer in customers:
-            action = random.choice(customer_actions)
+            modified_weights = action_weights.copy()
+            # each shop provides a 10% boost to the weight of going to a shop
+            modified_weights[1] = modified_weights[1]*(1 + 0.1*len(shops))
+            # each customer provides a 5% boost to the weight of leaving the game
+            modified_weights[2] = modified_weights[2]*(1 + 0.05*len(customers))
+            action = random.choices(customer_actions, weights=modified_weights, k=1)[0]
             if action == 'go_to_shop':
                 if len(shops) == 0:
                     log.append(f'Customer {customer.name} couldn\'t buy anything because there are no shops!')
