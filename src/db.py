@@ -13,7 +13,7 @@ from . import common
 DB_PATH = "db/database.db"
 
 def get_engine():
-    return create_engine("sqlite:///{}".format(DB_PATH), echo=True)
+    return create_engine("sqlite:///{}".format(DB_PATH), echo=False)
 
 def get_session():
     return Session(get_engine())
