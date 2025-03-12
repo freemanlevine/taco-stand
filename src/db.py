@@ -8,10 +8,15 @@ import os
 from . import models
 from .models import Shop, Customer, MenuItem
 
+from . import common
+
 DB_PATH = "db/database.db"
 
 def get_engine():
     return create_engine("sqlite:///{}".format(DB_PATH), echo=False)
+
+def get_session():
+    return Session(get_engine())
 
 def delete_db():
     os.remove(DB_PATH)
@@ -48,27 +53,30 @@ def get_all(session, object_type):
 
 def purchase_item(customer_id, menu_item_id):
     engine = get_engine()
+    message = ''
     with Session(engine) as session:
         customer = get_by_id(session, Customer, customer_id)
         menu_item = get_by_id(session, MenuItem, menu_item_id)
         shop = get_by_id(session, Shop, menu_item.shop_id)
         money_remaining = customer.money - menu_item.cost
         if money_remaining < 0:
-            print("{name} doesn't have enough money!\n{item_name} costs ${item_cost:,.2f} and {name} has ${amount:,.2f} left".format(
+            message = "{name} doesn't have enough money!\n{item_name} costs ${item_cost:,.2f} and {name} has ${amount:,.2f} left".format(
                 name = customer.name,
                 item_name = menu_item.name,
                 item_cost = menu_item.cost/100.0,
                 amount = customer.money/100.0
-            ))
+            )
         else:
             customer.money = money_remaining
             session.commit()
-            print("Customer {} purchased {} from {} and has ${:,.2f} left!".format(
+            message = "Customer {} purchased {} from {} and has ${:,.2f} left!".format(
                 customer.name,
                 menu_item.name,
                 shop.name,
                 customer.money/100.0
-            ))
+            )
+        print(message)
+        return message
 
 def get_menu_items(session, shop_id):
     """returns a list of menu items belonging to a given shop"""
@@ -130,3 +138,22 @@ def delete_player(player_id):
             pass
         session.delete(player)
         session.commit()
+
+def build_shop(created_by_player_id, shop_price):
+    with get_session() as session:
+        player = get_by_id(session, models.Player, created_by_player_id)
+        try:
+            created_shop = models.Shop(
+                name=common.get_random_shop_name(),
+                owned_by=created_by_player_id
+            )
+            player.money = player.money - shop_price
+            if player.money < 0.0:
+                raise ValueError("Insufficient funds")
+            session.add(created_shop)
+            session.commit()
+            message = f"{player.name} built {created_shop.name} for ${shop_price/100:,.2f}"
+            message += f" and has ${player.money/100:,.2f} remaining."
+            return message
+        except ValueError:
+            return f"{player.name} failed to build a shop due to insufficient funds."

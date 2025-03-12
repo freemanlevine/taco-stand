@@ -1,7 +1,7 @@
 from flask import Flask, redirect
 from flask import request
 
-from . import db, models
+from . import db, models, game
 
 app = Flask(__name__)
 
@@ -12,17 +12,32 @@ links = {
     "player": '<div><a href="/player">Load Player Profile</a></div>',
 }
 
+def player_block():
+    html = ""
+    try:
+        active_player = db.get_active_player()
+        html += f'<div>Current Player: {active_player.name} - ${active_player.money/100.0:,.2f}<br>'
+        html += f'<a href="/build-shop">Build Shop - ${game.shop_price/100:,.2f}</a></div><br>'
+    except Exception as e:
+        html += 'No Player loaded<br>'
+    return html
+
 @app.route("/")
 def home():
     html = "<p>Welcome to the Taco Stand App!</p>"
-    try:
-        active_player = db.get_active_player()
-        html += f'Current Player: {active_player.name} - ${active_player.money/100.0:,.2f}'
-    except Exception as e:
-        html += 'No Player loaded<br>'
+    html += player_block()
     html += links["shops"]
     html += links["customers"]
     html += links["player"]
+    return html
+
+@app.route("/build-shop")
+def build_shop():
+    active_player = db.get_active_player()
+    html = db.build_shop(active_player.id, game.shop_price)
+    html += "<br>"
+    html += player_block()
+    html += links["home"]
     return html
 
 @app.route("/player")
@@ -34,7 +49,7 @@ def show_players():
         for player in players:
             html += f'<div>{player.name} - ${player.money/100.0:,.2f}</div>'
             html += f'<div><a href="/player/{player.id}/load">Load Profile</a></div>'
-            html += f'<div><a href="/player/{player.id}/delete">Delete Profile</a><div>'
+            html += f'<div><a href="/player/{player.id}/delete">Delete Profile</a></div>'
         html += create_player_form("Create New Player")
     html += links["home"]
     return html
@@ -64,7 +79,6 @@ def create_player_form(button_text):
     html += f'<input type="submit" value="{button_text}">'
     html += '</form>'
     return html
-
 
 @app.route("/player/create")
 def create_player():

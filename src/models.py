@@ -69,7 +69,7 @@ class Player(Base):
     name: Mapped[str] = mapped_column(String(30), unique=True)
     money: Mapped[int] = mapped_column(Integer, default=0) # in cents
 
-    owned_shops: Mapped[List["Shop"]] = relationship()
+    owned_shops: Mapped[List["Shop"]] = relationship(cascade="all,delete")
 
     def __repr__(self) -> str:
         return f"Player(id={self.id!r}, name={self.name!r})"
