@@ -21,6 +21,9 @@ base_spawn_rate = 2
 # all customers receive this every round that they do nothing
 background_income = 2.00*100
 
+# customers start with this amount of money
+starting_money = 20*100
+
 def increment_simulation():
     """
         loops through customers and decides if they enter a shop and / or buy something
@@ -30,7 +33,7 @@ def increment_simulation():
     log = []
 
     for i in range(0, base_spawn_rate):
-        log.append(db.create_customer())
+        log.append(db.create_customer(starting_money=starting_money))
 
     with db.get_session() as session:
         customers = db.get_all(session, models.Customer)

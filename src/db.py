@@ -164,11 +164,11 @@ def build_shop(created_by_player_id, shop_price):
         except ValueError:
             return f"{player.name} failed to build a shop due to insufficient funds."
         
-def create_customer():
+def create_customer(starting_money=10*100):
     with get_session() as session:
         customer = models.Customer(
             name=common.get_random_name(),
-            money=10*100
+            money=starting_money
         )
         session.add(customer)
         session.commit()
