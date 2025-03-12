@@ -5,22 +5,41 @@ shop_types = [
     'Tacos',
     'Pancakes',
     'Burritos',
+    'Diner',
+    'Restaurant',
+    'Cafe'
+]
+base_foods = [
+    ('Taco', 1.00*100),
+    ('Pancakes', 4.00*100),
+    ('Burrito', 6.00*100),
+    ('Salad', 5.00*100),
+    ('Smoothie', 8.00*100)
 ]
 
-available_menu_items = [
-    ('Rolled Taco', 1.50*100),
-    ('Strawberry Pancakes', 5.00*100),
-    ('Cali Burrito', 8.00*100),
-    ('Loaded Taco', 2.15*100),
-    ('DoubleStuffed Burrito', 12.00*100)
+modifiers = [
+    ('Rolled', 1.25),
+    ('Stuffed', 1.5),
+    ('Strawberry', 1.75),
+    ('Chicken', 2.0),
+    ('Loaded', 2.25),
+    ('DoubleStuffed', 2.5)
 ]
 
 base_profit_margin = 0.15
 
+def make_random_menu_item():
+    base_food = random.choice(base_foods)
+    modifier = random.choice(modifiers)
+    return ( f"{modifier[0]} {base_food[0]}", base_food[1] * modifier[1] )
+
 def get_random_menu():
-    """select between 1 and 2 random menu items"""
-    number_of_items = random.randint(1, len(available_menu_items))
-    return random.sample(available_menu_items, k=number_of_items)
+    """select between 2 and 5 random menu items"""
+    number_of_items = random.randint(1, 5)
+    return [
+        make_random_menu_item()
+        for i in range(0, number_of_items)
+    ]
 
 def get_random_name():
     with open("static/names.txt") as infile:
