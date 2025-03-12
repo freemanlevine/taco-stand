@@ -51,7 +51,7 @@ def increment_simulation():
                 chosen_menu_items = random.choices(chosen_shop.menu_items, k=random.randint(1, len(chosen_shop.menu_items)))
                 log.append(f'Customer {customer.name} is heading to {chosen_shop.name} and wants {len(chosen_menu_items)} items')
                 for item in chosen_menu_items:
-                    log.append(db.purchase_item(session, active_player.id, customer.id, item.id))
+                    log.append(db.purchase_item(session, chosen_shop.owned_by, customer.id, item.id))
                 session.commit()
             elif action == 'do_nothing':
                 customer.money = customer.money + background_income
