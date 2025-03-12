@@ -20,18 +20,23 @@ class Shop(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(30))
+    owned_by: Mapped[int] = mapped_column(ForeignKey("player.id"))
 
-    menu_items: Mapped[List["MenuItem"]] = relationship()
+    menu_items: Mapped[List["MenuItem"]] = relationship(cascade="all,delete")
 
     def __repr__(self) -> str:
         return f"Shop(id={self.id!r}, name={self.name!r})"
     
-    def print_menu(self):
-        print("--- {} ---".format(self.name))
-        print("Menu:")
+    def get_menu_text(self):
+        text = "--- {} ---\n".format(self.name)
+        text += "Menu:\n"
         for i in range(1, len(self.menu_items)+1):
             item = self.menu_items[i-1]
-            print("\t{}. {}: ${:,.2f}".format(i, item.name, item.cost/100.0))
+            text += "\t{}. {}: ${:,.2f}\n".format(i, item.name, item.cost/100.0)
+        return text
+    
+    def print_menu(self):
+        print(self.get_menu_text())
 
 class Customer(Base):
     """A customer that can buy goods from one or more shops"""
@@ -55,3 +60,24 @@ class MenuItem(Base):
 
     def __repr__(self) -> str:
         return f"MenuItem(id={self.id!r}, name={self.name!r}, cost=${self.cost/100.0}, shop_id={self.shop_id})"
+
+class Player(Base):
+    """the player. Players can own shops."""
+    __tablename__ = "player"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    name: Mapped[str] = mapped_column(String(30), unique=True)
+    money: Mapped[int] = mapped_column(Integer, default=0) # in cents
+
+    owned_shops: Mapped[List["Shop"]] = relationship(cascade="all,delete")
+
+    def __repr__(self) -> str:
+        return f"Player(id={self.id!r}, name={self.name!r})"
+
+class ActivePlayer(Base):
+    __tablename__ = "active_player"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    player_id: Mapped[int] = mapped_column(ForeignKey("player.id"))
+
+    player: Mapped[Player] = relationship()
