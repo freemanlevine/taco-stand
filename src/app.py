@@ -32,6 +32,11 @@ def home():
     html += links["player"]
     return html
 
+@app.route("/shop/<int:shop_id>/delete")
+def delete_shop(shop_id):
+    db.delete_shop(shop_id)
+    return redirect("/shops")
+
 @app.route("/increment")
 def increment_simulation():
     html = "<div> Actions During Turn:<br>"
@@ -132,7 +137,8 @@ def show_shops():
     with db.Session(engine) as session:
         shops = db.get_all(session, models.Shop)
         for shop in shops:
-            html += '<div>' + shop.get_menu_text() + '</div>'
+            html += f'<div>{shop.get_menu_text()}'
+            html += f' - <a href="/shop/{shop.id}/delete">Delete Shop</a></div>'
     html += '<br>'
     html += links["home"]
     return html

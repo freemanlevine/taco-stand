@@ -173,3 +173,9 @@ def create_customer():
         session.add(customer)
         session.commit()
         return f"Customer {customer.name} created with ${customer.money/100:,.2f}"
+
+def delete_shop(shop_id):
+    with get_session() as session:
+        shop = get_by_id(session, Shop, shop_id)
+        session.delete(shop)
+        session.commit()

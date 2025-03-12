@@ -9,7 +9,7 @@ customer_actions = [
 ]
 
 action_weights = [
-    0.35, 0.25, 0.25
+    0.35, 0.25, 0.10
 ]
 
 # $20.00
@@ -39,6 +39,9 @@ def increment_simulation():
         for customer in customers:
             action = random.choice(customer_actions)
             if action == 'go_to_shop':
+                if len(shops) == 0:
+                    log.append(f'Customer {customer.name} couldn\'t buy anything because there are no shops!')
+                    continue
                 chosen_shop = random.choice(shops)
                 chosen_menu_items = random.choices(chosen_shop.menu_items, k=random.randint(1, len(chosen_shop.menu_items)))
                 log.append(f'Customer {customer.name} is heading to {chosen_shop.name} and wants {len(chosen_menu_items)} items')
