@@ -1,5 +1,6 @@
 from flask import Flask, redirect
 from flask import request
+from flask import render_template
 
 from . import db, models, game
 
@@ -25,12 +26,13 @@ def player_block():
 
 @app.route("/")
 def home():
-    html = "<p>Welcome to the Taco Stand App!</p>"
-    html += player_block()
-    html += links["shops"]
-    html += links["customers"]
-    html += links["player"]
-    return html
+    active_player = db.get_active_player()
+    return render_template(
+        "home.html",
+        name=active_player.name,
+        money=f'{active_player.money/100.0:,.2f}',
+        shop_price=f'{game.shop_price/100.0:,.2f}'
+    )
 
 @app.route("/shop/<int:shop_id>/delete")
 def delete_shop(shop_id):
