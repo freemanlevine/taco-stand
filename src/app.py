@@ -73,12 +73,12 @@ def load_player(player_id):
     try:
         active_player = db.set_active_player(player_id)
         return render_template(
-            'player/create.html',
+            'player/load.html',
             name=active_player.name
         )
     except Exception as e:
         return render_template(
-            'player/create.html',
+            'player/load.html',
             error=e
         )
 
