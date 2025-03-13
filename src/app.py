@@ -60,7 +60,6 @@ def show_players():
 def create_player():
     name = request.args.get('name')
     difficulty = request.args.get('difficulty')
-    html = ''
     try:
         db.create_player(name, starting_money=game.difficulties[difficulty])
         return render_template(
@@ -70,7 +69,6 @@ def create_player():
             button_text="Create"
         )
     except Exception as e:
-        html += f'Error creating player - {e}'
         return render_template(
             "player/create.html",
             error=e,
