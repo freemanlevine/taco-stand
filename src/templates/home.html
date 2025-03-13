@@ -1,17 +1,15 @@
 <!doctype html>
-<title>Taco Stand</title>
-<p>Welcome to the Taco Stand App!</p>
-{% if name %}
-<div>
-    Current Player: {{ name }} - ${{ money }}<br>
-    <a href="/build-shop">Build Shop - ${{ shop_price }}</a><br>
-    <a href="/increment">Increment Simulation</a><br>
-</div> <br>
-{% else %}
-<div>
-    No Player loaded<br>
-</div>
-{% endif %}
-<div><a href="/shops">View Shops</a></div>
-<div><a href="/customers">View Customers</a></div>
-<div><a href="/player">Load Player Profile</a></div>
+<html>
+    <head>
+        <title>Taco Stand</title>
+        <p>Welcome to the Taco Stand App!</p>
+    </head>
+    <body>
+        {% include 'player.html' %}
+        <div id="footer">
+            <div><a href="/shops">View Shops</a></div>
+            <div><a href="/customers">View Customers</a></div>
+            <div><a href="/player">Load Player Profile</a></div>
+        </div>
+    </body>
+</html>
