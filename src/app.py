@@ -134,16 +134,12 @@ def delete_player(player_id):
 
 @app.route("/shops")
 def show_shops():
-    engine = db.get_engine()
-    html = ""
-    with db.Session(engine) as session:
+    with db.get_session() as session:
         shops = db.get_all(session, models.Shop)
-        for shop in shops:
-            html += f'<div>{shop.get_menu_text()}'
-            html += f' - <a href="/shop/{shop.id}/delete">Delete Shop</a></div>'
-    html += '<br>'
-    html += links["home"]
-    return html
+        return render_template(
+            "shops.html",
+            shops=shops
+        )
 
 @app.route("/customers")
 def show_customers():
