@@ -1,0 +1,21 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Taco Stand</title>
+    </head>
+    <body>
+        {% for player in players %}
+        <div>
+            {{ player.name }} - ${{ "{:,.2f}".format(player.money/100.0) }}<br>
+            <a href="/player/{{ player.id }}/load">Load Profile</a><br>
+            <a href="/player/{{ player.id }}/delete">Delete Profile</a><br>
+        </div>
+        <br>
+        {% endfor %}
+        {% include 'player/create_player_form.html' %}
+    </body>
+    <br>
+    <footer>
+        <div><a href="/">Back to Home</a></div>
+    </footer>
+</html>

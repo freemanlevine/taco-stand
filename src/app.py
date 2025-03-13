@@ -61,17 +61,13 @@ def build_shop():
 
 @app.route("/player")
 def show_players():
-    engine = db.get_engine()
-    html = ""
-    with db.Session(engine) as session:
+    with db.get_session() as session:
         players = db.get_all(session, models.Player)
-        for player in players:
-            html += f'<div>{player.name} - ${player.money/100.0:,.2f}</div>'
-            html += f'<div><a href="/player/{player.id}/load">Load Profile</a></div>'
-            html += f'<div><a href="/player/{player.id}/delete">Delete Profile</a></div>'
-        html += create_player_form("Create New Player")
-    html += links["home"]
-    return html
+        return render_template(
+            "list_players.html",
+            players=players,
+            button_text="Create New Player"
+        )
 
 difficulties = {
     'easy': 100*100, # $100,
@@ -106,13 +102,19 @@ def create_player():
     html = ''
     try:
         db.create_player(name, starting_money=difficulties[difficulty])
-        html += f'Player {name} created on {difficulty} difficulty!'
+        return render_template(
+            "player/create.html",
+            name=name,
+            difficulty=difficulty,
+            button_text="Create"
+        )
     except Exception as e:
         html += f'Error creating player - {e}'
-    html += '<br><br>Create Another Player:'
-    html += create_player_form("Create")
-    html += links['home']
-    return html
+        return render_template(
+            "player/create.html",
+            error=e,
+            button_text="Create"
+        )
 
 @app.route("/player/<int:player_id>/load/")
 def load_player(player_id):

@@ -1,0 +1,23 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Taco Stand</title>
+    </head>
+    <body>
+        <div>
+            {% if name %}
+                Player {{ name }} created on {{ difficulty }} difficulty!
+            {% else %}
+                Error creating player - {{ error }}
+            {% endif %}
+        </div>
+        <div>
+            <br>Create Another Player:
+            {% include 'player/create_player_form.html' %}
+        </div>
+    </body>
+    <br>
+    <footer>
+        <div><a href="/">Back to Home</a></div>
+    </footer>
+</html>
