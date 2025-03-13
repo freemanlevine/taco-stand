@@ -41,12 +41,14 @@ def delete_shop(shop_id):
 
 @app.route("/increment")
 def increment_simulation():
-    html = "<div> Actions During Turn:<br>"
-    html += "<br>".join(game.increment_simulation())
-    html += "</div><br>"
-    html += player_block()
-    html += links["home"]
-    return html
+    active_player = db.get_active_player()
+    return render_template(
+        "increment.html",
+        messages=game.increment_simulation(),
+        name=active_player.name,
+        money=f'{active_player.money/100.0:,.2f}',
+        shop_price=f'{game.shop_price/100.0:,.2f}'
+    )
 
 @app.route("/build-shop")
 def build_shop():

@@ -1,0 +1,21 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Taco Stand</title>
+    </head>
+    <body>
+        <div>
+            Actions During Turn:<br>
+            {% for message in messages %}
+            <div>
+                {{ message }}<br>
+            </div>
+            {% endfor %}
+        </div>
+        <br>
+        {% include 'player.html' %}
+    </body>
+    <footer>
+        <div><a href="/">Back to Home</a></div>
+    </footer>
+</html>
