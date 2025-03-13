@@ -36,7 +36,8 @@ def build_shop():
     return render_template(
         "build_shop.html",
         message = db.build_shop(active_player.id, game.shop_price),
-
+        player=active_player,
+        shop_price=game.shop_price
     )
 
 @app.route("/player")
