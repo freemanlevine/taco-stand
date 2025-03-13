@@ -55,7 +55,8 @@ def create_player():
     name = request.args.get('name')
     difficulty = request.args.get('difficulty')
     try:
-        db.create_player(name, starting_money=game.difficulties[difficulty])
+        new_player_id = db.create_player(name, starting_money=game.difficulties[difficulty])
+        db.set_active_player(new_player_id)
         return render_template(
             "player/create.html",
             name=name,

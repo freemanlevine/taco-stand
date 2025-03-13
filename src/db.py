@@ -87,6 +87,8 @@ def get_menu_items(session, shop_id):
     ))
 
 def create_player(player_name, starting_money=0):
+    if player_name == '':
+        raise ValueError("Can't create player with empty name.")
     engine = get_engine()
     with Session(engine) as session:
         new_player = models.Player(
@@ -95,6 +97,7 @@ def create_player(player_name, starting_money=0):
         )
         session.add(new_player)
         session.commit()
+        return new_player.id
 
 def get_active_player():
     engine = get_engine()
