@@ -6,14 +6,10 @@
     <body>
         <div>
             {% if name %}
-                Player {{ name }} created on {{ difficulty }} difficulty!
+                Player {{ name }} loaded!
             {% else %}
-                Error creating player - {{ error }}
+                Error loading player profile - {{ error }}
             {% endif %}
-        </div>
-        <div>
-            <br>Create Another Player:
-            {% include 'player/create_player_form.html' %}
         </div>
     </body>
     <br>

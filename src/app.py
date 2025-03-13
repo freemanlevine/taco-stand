@@ -6,13 +6,6 @@ from . import db, models, game
 
 app = Flask(__name__)
 
-links = {
-    "home": '<div><a href="/">Back to Home</a></div>',
-    "shops": '<div><a href="/shops">View Shops</a></div>',
-    "customers": '<div><a href="/customers">View Customers</a></div>',
-    "player": '<div><a href="/player">Load Player Profile</a></div>',
-}
-
 @app.route("/")
 def home():
     active_player = db.get_active_player()
@@ -77,14 +70,17 @@ def create_player():
 
 @app.route("/player/<int:player_id>/load/")
 def load_player(player_id):
-    html = ''
     try:
         active_player = db.set_active_player(player_id)
-        html = f'Player {active_player.name} loaded!'
+        return render_template(
+            'player/create.html',
+            name=active_player.name
+        )
     except Exception as e:
-        html += f'Error loading player profile - {e}'
-    html += links['home']
-    return html
+        return render_template(
+            'player/create.html',
+            error=e
+        )
 
 @app.route("/player/<int:player_id>/delete/")
 def delete_player(player_id):
