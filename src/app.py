@@ -143,15 +143,9 @@ def show_shops():
 
 @app.route("/customers")
 def show_customers():
-    engine = db.get_engine()
-    html = ""
-    with db.Session(engine) as session:
+    with db.get_session() as session:
         customers = db.get_all(session, models.Customer)
-        for customer in customers:
-            html += '<div>{} - ${:,.2f} remaining</div>'.format(
-                customer.name,
-                customer.money / 100.0
-            )
-    html += '<br>'
-    html += links["home"]
-    return html
+        return render_template(
+            "customers.html",
+            customers=customers
+        )
