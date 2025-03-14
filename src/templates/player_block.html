@@ -1,0 +1,11 @@
+{% if player %}
+<div>
+    Current Player: {{ player.name }} - ${{ '{:,.2f}'.format(player.money/100.0) }}<br>
+    <a href="/build-shop">Build Shop - ${{ '{:,.2f}'.format(shop_price/100.0) }}</a><br>
+    <a href="/increment">Increment Simulation</a><br>
+</div> <br>
+{% else %}
+<div>
+    No Player loaded<br>
+</div>
+{% endif %}

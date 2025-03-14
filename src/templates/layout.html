@@ -1,0 +1,70 @@
+<!doctype html>
+<html>
+    <head>
+        <style>
+            .columns {
+                display: flex;
+            }
+            .columns > div {
+                margin: 20px;
+                padding: 20px;
+            }
+            .left-column {
+                display: flex;
+                flex-direction: column;
+                flex-basis: 50%;
+            }
+            .left-column > div {
+                margin: 10px;
+                padding: 10px;
+                border: 2px solid black;
+            }
+            .right-column {
+                display: flex;
+                flex-direction: column;
+                align-items: stretch;
+                flex-basis: 50%;
+            }
+            .right-column > div {
+                padding: 20px;
+                justify-content: center;
+                border: 2px solid black;
+            }
+        </style>
+        <title>Taco Stand</title>
+    </head>
+    <body>
+        <div class="columns">
+            <div class="left-column">
+                {% block left_column %}
+                    <div style="text-align:center;"><p>Welcome to the Taco Stand App!</p></div>
+                    <div><a href="/shops">View Shops</a></div>
+                    <div><a href="/customers">View Customers</a></div>
+                    <div><a href="/player">Load Player Profile</a></div>
+                {% endblock %}
+            </div>
+            <div class="right-column">
+                {% block right_column %}
+                <style>
+                </style>
+                <div>
+                    <div style="text-align: center;">
+                        -- Game Log --
+                    </div>
+                </div>
+                <div style="flex-grow: 3; flex-basis: 100px;border-top:0px">
+                    {% block log_messages %}
+                    {% endblock %}
+                </div>
+                <div style="border-top:0px">
+                    {% include 'player_block.html' %}
+                </div>
+                {% endblock %}
+            </div>
+        </div>
+    </body>
+    <footer>
+        {% block footer %}
+        {% endblock %}
+    </footer>
+</html>

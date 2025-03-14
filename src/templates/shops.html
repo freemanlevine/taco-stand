@@ -1,0 +1,34 @@
+<style>
+    .shops-container {
+        display: flex;
+        flex-flow: row wrap;
+        justify-content: space-between;
+    }
+    .shops-container > div {
+        margin: 10px;
+        padding: 10px;
+        border: 2px solid black;
+        width: calc(2% + 100% / 4);
+    }
+</style>
+{% extends "layout.html" %}
+{% block left_column %}
+<div><a href="/">Back to Home</a></div>
+<div class="shops-container">
+    {% for shop in shops %}
+    <div>
+        {{ shop.name }}
+        <ul>
+            {% for menu_item in shop.menu_items %}
+            <li>{{ menu_item.name }} - ${{ '{:,.2f}'.format(menu_item.cost/100.0) }}</li>
+            {% endfor %}
+        </ul>
+        <a href="/shop/{{ shop.id }}/delete">Delete Shop</a>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
+
+{% block log_messages %}
+{{ message }}
+{% endblock %}

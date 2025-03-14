@@ -1,0 +1,19 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Taco Stand</title>
+    </head>
+    <body>
+        <div>
+            {% if name %}
+                Player {{ name }} loaded!
+            {% else %}
+                Error loading player profile - {{ error }}
+            {% endif %}
+        </div>
+    </body>
+    <br>
+    <footer>
+        <div><a href="/">Back to Home</a></div>
+    </footer>
+</html>

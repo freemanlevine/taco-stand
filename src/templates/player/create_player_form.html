@@ -1,0 +1,12 @@
+<form action="/player/create">
+    <label for="name">Name:</label>
+    <input id="name" name="name">
+    <label for="difficulty">Difficulty</label>
+    <select name="difficulty" id="difficulty">
+        <option value="easy">Easy - $100</option>
+        <option value="medium">Medium - $75</option>
+        <option value="hard">Hard - $50</option>
+        <option value="ultra">Ultra - $25</option>
+    </select>
+    <input type="submit" value="{{ button_text }}">
+</form>

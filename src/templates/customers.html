@@ -1,0 +1,10 @@
+{% extends "layout.html" %}
+{% block left_column %}
+<div><a href="/">Back to Home</a></div>
+{% for customer in customers %}
+<div>
+    {{ customer.name }} - 
+    ${{ '{:,.2f}'.format(customer.money/100.0) }} remaining
+</div>
+{% endfor %}
+{% endblock %}

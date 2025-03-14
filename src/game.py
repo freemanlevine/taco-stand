@@ -2,6 +2,13 @@ from . import db, models
 
 import random
 
+difficulties = {
+    'easy': 100*100, # $100,
+    'medium': 75*100, # $100,
+    'hard': 50*100, # $100,
+    'ultra': 25*100 # $100
+}
+
 customer_actions = [
     'do_nothing',
     'go_to_shop',
