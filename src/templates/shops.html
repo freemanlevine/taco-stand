@@ -3,7 +3,12 @@
 <div><a href="/">Back to Home</a></div>
 {% for shop in shops %}
 <div>
-    {{ shop.get_menu_text() }}
+    {{ shop.name }}
+    <ul>
+        {% for menu_item in shop.menu_items %}
+        <li>{{ menu_item.name }} - ${{ '{:,.2f}'.format(menu_item.cost/100.0) }}</li>
+        {% endfor %}
+    </ul>
     <a href="/shop/{{ shop.id }}/delete">Delete Shop</a>
 </div>
 {% endfor %}
