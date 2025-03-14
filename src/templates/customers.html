@@ -14,7 +14,7 @@
 {% extends "layout.html" %}
 {% block left_column %}
 <div><a href="/">Back to Home</a></div>
-<div class="customers-container" style="overflow: scroll;max-height: 650px;" >
+<div class="customers-container" style="overflow: auto;max-height: 650px;" >
     {% for customer in customers %}
     <div>
         {{ customer.name }} - 
