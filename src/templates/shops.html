@@ -1,10 +1,14 @@
 {% extends "layout.html" %}
 {% block left_column %}
+<div><a href="/">Back to Home</a></div>
 {% for shop in shops %}
 <div>
     {{ shop.get_menu_text() }}
     <a href="/shop/{{ shop.id }}/delete">Delete Shop</a>
 </div>
 {% endfor %}
-<div><a href="/">Back to Home</a></div>
+{% endblock %}
+
+{% block log_messages %}
+{{ message }}
 {% endblock %}

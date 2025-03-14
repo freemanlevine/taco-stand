@@ -42,12 +42,15 @@ def build_shop():
 
 @app.route("/player")
 def show_players():
+    active_player = db.get_active_player()
     with db.get_session() as session:
         players = db.get_all(session, models.Player)
         return render_template(
             "list_players.html",
             players=players,
-            button_text="Create New Player"
+            button_text="Create New Player",
+            player=active_player,
+            shop_price=game.shop_price
         )
 
 @app.route("/player/create")

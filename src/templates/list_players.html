@@ -1,5 +1,6 @@
 {% extends "layout.html" %}
 {% block left_column %}
+<div><a href="/">Back to Home</a></div>
 {% for player in players %}
 <div>
     {{ player.name }} - ${{ "{:,.2f}".format(player.money/100.0) }}<br>
@@ -10,5 +11,4 @@
 <div>
     {% include 'player/create_player_form.html' %}
 </div>
-<div><a href="/">Back to Home</a></div>
 {% endblock %}
