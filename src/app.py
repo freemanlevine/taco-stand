@@ -107,9 +107,12 @@ def show_shops():
 
 @app.route("/customers")
 def show_customers():
+    active_player = db.get_active_player()
     with db.get_session() as session:
         customers = db.get_all(session, models.Customer)
         return render_template(
             "customers.html",
-            customers=customers
+            customers=customers,
+            player=active_player,
+            shop_price=game.shop_price
         )

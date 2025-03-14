@@ -1,18 +1,10 @@
-<!doctype html>
-<html>
-    <head>
-        <title>Taco Stand</title>
-    </head>
-    <body>
-        {% for customer in customers %}
-        <div>
-            {{ customer.name }} - 
-            ${{ '{:,.2f}'.format(customer.money/100.0) }} remaining
-        </div>
-        {% endfor %}
-    </body>
-    <br>
-    <footer>
-        <div><a href="/">Back to Home</a></div>
-    </footer>
-</html>
+{% extends "layout.html" %}
+{% block left_column %}
+{% for customer in customers %}
+<div>
+    {{ customer.name }} - 
+    ${{ '{:,.2f}'.format(customer.money/100.0) }} remaining
+</div>
+{% endfor %}
+<div><a href="/">Back to Home</a></div>
+{% endblock %}
