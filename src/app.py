@@ -22,10 +22,11 @@ def delete_shop(shop_id):
 
 @app.route("/increment")
 def increment_simulation():
+    messages = game.increment_simulation()
     active_player = db.get_active_player()
     return render_template(
         "increment.html",
-        messages=game.increment_simulation(),
+        messages=messages,
         player=active_player,
         shop_price=game.shop_price
     )

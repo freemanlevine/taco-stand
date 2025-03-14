@@ -2,19 +2,17 @@
 <html>
     <head>
         <style>
-            .flex-container {
+            .columns {
                 display: flex;
-                align-items: stretch;
             }
-            .flex-container > div {
+            .columns > div {
                 margin: 20px;
                 padding: 20px;
             }
             .left-column {
-                flex-grow: 1;
                 display: flex;
                 flex-direction: column;
-                align-items: stretch;
+                flex-basis: 50%;
             }
             .left-column > div {
                 margin: 10px;
@@ -22,13 +20,21 @@
                 border: 2px solid black;
             }
             .right-column {
-                flex-grow: 3
+                display: flex;
+                flex-direction: column;
+                align-items: stretch;
+                flex-basis: 50%;
+            }
+            .right-column > div {
+                padding: 20px;
+                justify-content: center;
+                border: 2px solid black;
             }
         </style>
         <title>Taco Stand</title>
     </head>
     <body>
-        <div class="flex-container">
+        <div class="columns">
             <div class="left-column">
                 {% block left_column %}
                     <div style="text-align:center;"><p>Welcome to the Taco Stand App!</p></div>
@@ -40,30 +46,18 @@
             <div class="right-column">
                 {% block right_column %}
                 <style>
-                    .container {
-                        display: flex;
-                        flex-direction: column;
-                        align-items: stretch;
-                    }
-                    .container > div {
-                        padding: 20px;
-                        justify-content: center;
-                        flex-grow: 1;
-                    }
                 </style>
-                <div class="container" style="border: 2px solid black;">
-                    <div style="border-bottom: 2px solid black;">
-                        <div style="text-align: center;">
-                            -- Game Log --
-                        </div>
+                <div>
+                    <div style="text-align: center;">
+                        -- Game Log --
                     </div>
-                    <div style="flex-grow: 5;border-bottom: 2px solid black;flex-basis: 100px;">
-                        {% block log_messages %}
-                        {% endblock %}
-                    </div>
-                    <div>
-                        {% include 'player_block.html' %}
-                    </div>
+                </div>
+                <div style="flex-grow: 3; flex-basis: 100px;border-top:0px">
+                    {% block log_messages %}
+                    {% endblock %}
+                </div>
+                <div style="border-top:0px">
+                    {% include 'player_block.html' %}
                 </div>
                 {% endblock %}
             </div>
