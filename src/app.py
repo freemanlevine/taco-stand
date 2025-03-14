@@ -95,11 +95,14 @@ def delete_player(player_id):
 
 @app.route("/shops")
 def show_shops():
+    active_player = db.get_active_player()
     with db.get_session() as session:
         shops = db.get_all(session, models.Shop)
         return render_template(
             "shops.html",
-            shops=shops
+            shops=shops,
+            player=active_player,
+            shop_price=game.shop_price
         )
 
 @app.route("/customers")
