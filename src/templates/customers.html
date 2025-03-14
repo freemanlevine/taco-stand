@@ -1,10 +1,25 @@
+<style>
+    .customers-container {
+        display: flex;
+        flex-flow: row wrap;
+        justify-content: space-between;
+    }
+    .customers-container > div {
+        margin: 10px;
+        padding: 10px;
+        border: 2px solid black;
+        width: calc(2% + 100% / 4);
+    }
+</style>
 {% extends "layout.html" %}
 {% block left_column %}
 <div><a href="/">Back to Home</a></div>
-{% for customer in customers %}
-<div>
-    {{ customer.name }} - 
-    ${{ '{:,.2f}'.format(customer.money/100.0) }} remaining
+<div class="customers-container" style="overflow: scroll;max-height: 650px;" >
+    {% for customer in customers %}
+    <div>
+        {{ customer.name }} - 
+        ${{ '{:,.2f}'.format(customer.money/100.0) }} remaining
+    </div>
+    {% endfor %}
 </div>
-{% endfor %}
 {% endblock %}
