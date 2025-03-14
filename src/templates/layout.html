@@ -58,6 +58,8 @@
                         </div>
                     </div>
                     <div style="flex-grow: 5;border-bottom: 2px solid black;flex-basis: 100px;">
+                        {% block log_messages %}
+                        {% endblock %}
                     </div>
                     <div>
                         {% include 'player_block.html' %}
